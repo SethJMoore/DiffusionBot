@@ -282,7 +282,7 @@ istream& operator>>(istream &is, State &state)
     return is;
 };
 
-void State::calculateDiffusionMap()
+void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 {
 	static int forward = 1;
 	if (forward == 1)

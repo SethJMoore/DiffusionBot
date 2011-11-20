@@ -20,7 +20,7 @@ void Bot::playGame()
     while(cin >> state)
     {
         state.updateVisionInformation();
-		state.calculateDiffusionMap();
+		state.calculateDiffusionMap(state.grid);
         makeMoves();
         endTurn();
     }
