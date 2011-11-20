@@ -10,14 +10,14 @@ struct Square
 {
     bool isVisible, isWater, isHill, isFood;
     int ant, hillPlayer;
-	int foodStrength;
+	int foodStrength, enemyHillStrength, enemyStrength, unseenStrength, neverSeenStrength, myAntsStrength, myHillStrength;
     std::vector<int> deadAnts;
 
     Square()
     {
         isVisible = isWater = isHill = isFood =  false;
         ant = hillPlayer = -1;
-		foodStrength = 0;
+		foodStrength = enemyHillStrength = enemyStrength = unseenStrength = neverSeenStrength = myAntsStrength = myHillStrength = 0;
     };
 
     //resets the information for the square except water information

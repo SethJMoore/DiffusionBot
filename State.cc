@@ -218,6 +218,8 @@ istream& operator>>(istream &is, State &state)
                 is >> row >> col;
                 state.grid[row][col].isWater = 1;
 				state.grid[row][col].foodStrength = 0;
+				state.grid[row][col].enemyHillStrength = 0;
+				state.grid[row][col].myHillStrength = 0;
             }
             else if(inputType == "f") //food square
             {
@@ -230,10 +232,10 @@ istream& operator>>(istream &is, State &state)
             {
                 is >> row >> col >> player;
                 state.grid[row][col].ant = player;
-				state.grid[row][col].foodStrength = 0;
                 if(player == 0)
 				{
                     state.myAnts.push_back(Location(row, col));
+					state.grid[row][col].foodStrength = 0;
 				}
                 else
                     state.enemyAnts.push_back(Location(row, col));
@@ -301,7 +303,6 @@ void State::calculateDiffusionMap()
 																		));
 				}
 			}
-			bug << endl;
 		}
 		forward = 0;
 	}
