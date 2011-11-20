@@ -66,6 +66,7 @@ struct State
 	void foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
 	int sumOfFoodStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
 	void neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfNeverSeenStrengths(int oldNeverSeenStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);

@@ -284,37 +284,17 @@ istream& operator>>(istream &is, State &state)
 
 void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 {
-	static int forward = 1;
-	if (forward == 1)
+	for (int y = 0; y < rows; y++)
 	{
-		for (int y = 0; y < rows; y++)
+		for (int x = 0; x < cols; x++)
 		{
-			for (int x = 0; x < cols; x++)
-			{
-				Square thisSquare = oldGrid[y][x];
-				foodDiffusion(thisSquare, y, x, oldGrid);
-				neverSeenDiffusion(thisSquare, y, x, oldGrid);
-				bug << thisSquare.hasBeenSeen;
-			}
-			bug << endl;
+			Square thisSquare = oldGrid[y][x];
+			foodDiffusion(thisSquare, y, x, oldGrid);
+			neverSeenDiffusion(thisSquare, y, x, oldGrid);
+			bug << thisSquare.hasBeenSeen;
 		}
-	//	forward = 0;
+		bug << endl;
 	}
-	//else
-	//{
-	//	for (int y = rows - 1; y >= 0; y--)
-	//	{
-	//		for (int x = cols - 1; x >= 0; x--)
-	//		{
-	//			Square thisSquare = grid[y][x];
-	//			foodDiffusion(thisSquare, y, x);
-	//			neverSeenDiffusion(thisSquare, y, x);
-	//			bug << thisSquare.hasBeenSeen;
-	//		}
-	//		bug << endl;
-	//	}
-	//	forward = 1;
-	//}
 };
 
 void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
@@ -322,35 +302,7 @@ void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vect
 	if (/*(!thisSquare.isFood) && */(!thisSquare.isWater) && (thisSquare.ant == -1))
 	{
 		int oldFoodStrength = thisSquare.foodStrength;
-		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (
-																/*(oldGrid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
-																(oldGrid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
-																(oldGrid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
-																(oldGrid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)*/
-																sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)
-																));
-	}
-};
-
-void State::neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
-{
-	if (!thisSquare.hasBeenSeen)
-	{
-		grid[y][x].neverSeenStrength = 1000;
-	}
-	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
-	{
-		int oldNeverSeenStrength = thisSquare.neverSeenStrength;
-		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.15) * (
-																(oldGrid[(y + rows - 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
-																(oldGrid[y][(x + 1) % cols].neverSeenStrength - oldNeverSeenStrength) +
-																(oldGrid[(y + 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
-																(oldGrid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength)
-															));
-	}
-	else
-	{
-		grid[y][x].neverSeenStrength = 0;
+		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)));
 	}
 };
 
@@ -372,6 +324,45 @@ int State::sumOfFoodStrengths(int oldFoodStrength, std::vector<std::vector<Squar
 	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
 	{
 		sum += (oldGrid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength);
+	}
+	return sum;
+};
+
+void State::neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.hasBeenSeen)
+	{
+		grid[y][x].neverSeenStrength = 1000;
+	}
+	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
+	{
+		int oldNeverSeenStrength = thisSquare.neverSeenStrength;
+		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.15) * (sumOfNeverSeenStrengths(oldNeverSeenStrength, oldGrid, y, x)));
+	}
+	else
+	{
+		grid[y][x].neverSeenStrength = 0;
+	}
+};
+
+int State::sumOfNeverSeenStrengths(int oldNeverSeenStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].neverSeenStrength - oldNeverSeenStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].neverSeenStrength - oldNeverSeenStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].neverSeenStrength - oldNeverSeenStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength);
 	}
 	return sum;
 };
