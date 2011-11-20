@@ -255,7 +255,10 @@ istream& operator>>(istream &is, State &state)
                 if(player == 0)
                     state.myHills.push_back(Location(row, col));
                 else
+				{
                     state.enemyHills.push_back(Location(row, col));
+					state.grid[row][col].enemyHillStrength += 1000;
+				}
 
             }
             else if(inputType == "players") //player information
@@ -291,6 +294,7 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 			Square thisSquare = oldGrid[y][x];
 			foodDiffusion(thisSquare, y, x, oldGrid);
 			neverSeenDiffusion(thisSquare, y, x, oldGrid);
+			enemyHillDiffusion(thisSquare, y, x, oldGrid);
 			bug << thisSquare.hasBeenSeen;
 		}
 		bug << endl;
@@ -299,7 +303,7 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 
 void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
-	if (/*(!thisSquare.isFood) && */(!thisSquare.isWater) && (thisSquare.ant == -1))
+	if ((!thisSquare.isWater) && (thisSquare.ant == -1))
 	{
 		int oldFoodStrength = thisSquare.foodStrength;
 		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)));
@@ -363,6 +367,37 @@ int State::sumOfNeverSeenStrengths(int oldNeverSeenStrength, std::vector<std::ve
 	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
 	{
 		sum += (oldGrid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength);
+	}
+	return sum;
+};
+
+void State::enemyHillDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.isWater)
+	{
+		int oldEnemyHillStrength = thisSquare.enemyHillStrength;
+		grid[y][x].enemyHillStrength = oldEnemyHillStrength + int((.30) * (sumOfEnemyHillStrengths(oldEnemyHillStrength, oldGrid, y, x)));
+	}
+};
+
+int State::sumOfEnemyHillStrengths(int oldEnemyHillStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].enemyHillStrength - oldEnemyHillStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].enemyHillStrength - oldEnemyHillStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].enemyHillStrength - oldEnemyHillStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].enemyHillStrength - oldEnemyHillStrength);
 	}
 	return sum;
 };

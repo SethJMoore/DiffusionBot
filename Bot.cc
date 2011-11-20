@@ -44,8 +44,8 @@ void Bot::makeMoves()
 			state.bug	<< "ant " << ant << ": " 
 						<< "Row" << testLoc.row << " Col" << testLoc.col << " FoodStrength" << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
 
-			if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength) >
-				(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength))
+			if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength + state.grid[testLoc.row][testLoc.col].enemyHillStrength) >
+				(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength + state.grid[bestLoc.row][bestLoc.col].enemyHillStrength))
             {
 				chosenD = d;
             }
