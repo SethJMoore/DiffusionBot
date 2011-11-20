@@ -56,6 +56,7 @@ struct State
     void reset();
 
     void makeMove(const Location &loc, int direction);
+	bool isSafeMove(Location & fromHere, int direction);
 
     double distance(const Location &loc1, const Location &loc2);
     Location getLocation(const Location &startLoc, int direction);

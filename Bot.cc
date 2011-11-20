@@ -50,7 +50,7 @@ void Bot::makeMoves()
 				chosenD = d;
             }
         }
-		if (chosenD != 4)
+		if ((chosenD != 4) && state.isSafeMove(state.myAnts[ant], chosenD))
 		{
 			state.makeMove(state.myAnts[ant], chosenD);
 		}

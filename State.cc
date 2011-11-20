@@ -46,6 +46,21 @@ void State::makeMove(const Location &loc, int direction)
     grid[loc.row][loc.col].ant = -1;
 };
 
+bool State::isSafeMove(Location & fromHere, int direction)
+{
+	bool safe;
+	Location testLoc = getLocation(fromHere, direction);
+	if (grid[testLoc.row][testLoc.col].ant == 0)
+	{
+		safe = false;
+	}
+	else
+	{
+		safe = true;
+	}
+	return safe;
+}
+
 //returns the euclidean distance between two locations with the edges wrapped
 double State::distance(const Location &loc1, const Location &loc2)
 {
@@ -295,7 +310,7 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 			foodDiffusion(thisSquare, y, x, oldGrid);
 			neverSeenDiffusion(thisSquare, y, x, oldGrid);
 			enemyHillDiffusion(thisSquare, y, x, oldGrid);
-			bug << thisSquare.hasBeenSeen;
+			bug << thisSquare.enemyHillStrength % 1000;
 		}
 		bug << endl;
 	}
@@ -341,7 +356,7 @@ void State::neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std:
 	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
 	{
 		int oldNeverSeenStrength = thisSquare.neverSeenStrength;
-		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.15) * (sumOfNeverSeenStrengths(oldNeverSeenStrength, oldGrid, y, x)));
+		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.20) * (sumOfNeverSeenStrengths(oldNeverSeenStrength, oldGrid, y, x)));
 	}
 	else
 	{
@@ -376,7 +391,7 @@ void State::enemyHillDiffusion(Square thisSquare, int y, int x, std::vector<std:
 	if (!thisSquare.isWater)
 	{
 		int oldEnemyHillStrength = thisSquare.enemyHillStrength;
-		grid[y][x].enemyHillStrength = oldEnemyHillStrength + int((.30) * (sumOfEnemyHillStrengths(oldEnemyHillStrength, oldGrid, y, x)));
+		grid[y][x].enemyHillStrength = oldEnemyHillStrength + int((.15) * (sumOfEnemyHillStrengths(oldEnemyHillStrength, oldGrid, y, x)));
 	}
 };
 
