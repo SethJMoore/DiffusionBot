@@ -73,6 +73,18 @@ struct State
 
 	void enemyHillDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
 	int sumOfEnemyHillStrengths(int oldEnemyHillStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+	
+	void enemyDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfEnemyStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+	
+	void unseenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfUnseenStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+	
+	void myAntsDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfMyAntsStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+	
+	void myHillsDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfMyHillsStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);

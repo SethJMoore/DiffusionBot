@@ -310,9 +310,13 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 			foodDiffusion(thisSquare, y, x, oldGrid);
 			neverSeenDiffusion(thisSquare, y, x, oldGrid);
 			enemyHillDiffusion(thisSquare, y, x, oldGrid);
-			bug << thisSquare.enemyHillStrength % 1000;
+			enemyDiffusion(thisSquare, y, x, oldGrid);
+			unseenDiffusion(thisSquare, y, x, oldGrid);
+			myAntsDiffusion(thisSquare, y, x, oldGrid);
+			myHillsDiffusion(thisSquare, y, x, oldGrid);
+			//bug << thisSquare.enemyHillStrength % 1000;
 		}
-		bug << endl;
+		//bug << endl;
 	}
 };
 
@@ -413,6 +417,130 @@ int State::sumOfEnemyHillStrengths(int oldEnemyHillStrength, std::vector<std::ve
 	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
 	{
 		sum += (oldGrid[y][(x + cols - 1) % cols].enemyHillStrength - oldEnemyHillStrength);
+	}
+	return sum;
+};
+
+void State::enemyDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.isWater)
+	{
+		int oldEnemyStrength = thisSquare.enemyStrength;
+		grid[y][x].enemyStrength = oldEnemyStrength + int((.15) * (sumOfEnemyStrengths(oldEnemyStrength, oldGrid, y, x)));
+	}
+};
+
+int State::sumOfEnemyStrengths(int oldEnemyStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].enemyStrength - oldEnemyStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].enemyStrength - oldEnemyStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].enemyStrength - oldEnemyStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].enemyStrength - oldEnemyStrength);
+	}
+	return sum;
+};
+
+void State::unseenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.isWater)
+	{
+		int oldUnseenStrength = thisSquare.unseenStrength;
+		grid[y][x].unseenStrength = oldUnseenStrength + int((.15) * (sumOfUnseenStrengths(oldUnseenStrength, oldGrid, y, x)));
+	}
+};
+
+int State::sumOfUnseenStrengths(int oldUnseenStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].unseenStrength - oldUnseenStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].unseenStrength - oldUnseenStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].unseenStrength - oldUnseenStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].unseenStrength - oldUnseenStrength);
+	}
+	return sum;
+};
+
+void State::myAntsDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.isWater)
+	{
+		int oldMyAntsStrength = thisSquare.myAntsStrength;
+		grid[y][x].myAntsStrength = oldMyAntsStrength + int((.15) * (sumOfMyAntsStrengths(oldMyAntsStrength, oldGrid, y, x)));
+	}
+};
+
+int State::sumOfMyAntsStrengths(int oldMyAntsStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].myAntsStrength - oldMyAntsStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].myAntsStrength - oldMyAntsStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].myAntsStrength - oldMyAntsStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].myAntsStrength - oldMyAntsStrength);
+	}
+	return sum;
+};
+
+void State::myHillsDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
+{
+	if (!thisSquare.isWater)
+	{
+		int oldMyHillsStrength = thisSquare.myHillStrength;
+		grid[y][x].myHillStrength = oldMyHillsStrength + int((.15) * (sumOfMyHillsStrengths(oldMyHillsStrength, oldGrid, y, x)));
+	}
+};
+
+int State::sumOfMyHillsStrengths(int oldMyHillsStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].myHillStrength - oldMyHillsStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].myHillStrength - oldMyHillsStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].myHillStrength - oldMyHillsStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].myHillStrength - oldMyHillsStrength);
 	}
 	return sum;
 };
