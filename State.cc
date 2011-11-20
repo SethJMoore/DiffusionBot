@@ -7,7 +7,7 @@ State::State()
 {
     gameover = 0;
     turn = 0;
-    bug.open("./debug.txt");
+    bug.open("debug.txt");
 };
 
 //deconstructor
@@ -59,8 +59,15 @@ double State::distance(const Location &loc1, const Location &loc2)
 //returns the new location from moving in a given direction with the edges wrapped
 Location State::getLocation(const Location &loc, int direction)
 {
-    return Location( (loc.row + DIRECTIONS[direction][0] + rows) % rows,
-                     (loc.col + DIRECTIONS[direction][1] + cols) % cols );
+	if (direction == 4)
+	{
+		return loc;
+	}
+	else
+	{
+		return Location( (loc.row + DIRECTIONS[direction][0] + rows) % rows,
+			             (loc.col + DIRECTIONS[direction][1] + cols) % cols );
+	}
 };
 
 /*
@@ -215,14 +222,18 @@ istream& operator>>(istream &is, State &state)
             {
                 is >> row >> col;
                 state.grid[row][col].isFood = 1;
+				state.grid[row][col].foodStrength = 1000;
                 state.food.push_back(Location(row, col));
             }
             else if(inputType == "a") //live ant square
             {
                 is >> row >> col >> player;
                 state.grid[row][col].ant = player;
+				state.grid[row][col].foodStrength = 0;
                 if(player == 0)
+				{
                     state.myAnts.push_back(Location(row, col));
+				}
                 else
                     state.enemyAnts.push_back(Location(row, col));
             }
@@ -264,4 +275,56 @@ istream& operator>>(istream &is, State &state)
     }
 
     return is;
+};
+
+void State::calculateDiffusionMap()
+{
+	static int forward = 1;
+	if (forward == 1)
+	{
+		for (int y = 0; y < rows; y++)
+		{
+			for (int x = 0; x < cols; x++)
+			{
+				Square thisSquare = grid[y][x];
+				if ((!thisSquare.isFood) && (!thisSquare.isWater) && (thisSquare.ant == -1))
+				{
+					int oldFoodStrength = thisSquare.foodStrength;
+					//bug << timer.getTime() << endl << y << x << endl;
+					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
+					grid[y][x].foodStrength = oldFoodStrength + int((.30) * (
+																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
+																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
+																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
+																			(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
+																		));
+				}
+			}
+			bug << endl;
+		}
+		forward = 0;
+	}
+	else
+	{
+		for (int y = rows - 1; y >= 0; y--)
+		{
+			for (int x = cols - 1; x >= 0; x--)
+			{
+				Square thisSquare = grid[y][x];
+				if (!thisSquare.isFood && !thisSquare.isWater && (thisSquare.ant == -1))
+				{
+					int oldFoodStrength = thisSquare.foodStrength;
+					//bug << timer.getTime() << endl << y << x << endl;
+					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
+					grid[y][x].foodStrength = oldFoodStrength + int((.30) * (
+																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
+																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
+																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
+																			(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
+																		));
+				}
+			}
+		}
+		forward = 1;
+	}
 };

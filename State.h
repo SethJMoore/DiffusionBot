@@ -61,6 +61,7 @@ struct State
     Location getLocation(const Location &startLoc, int direction);
 
     void updateVisionInformation();
+	void calculateDiffusionMap();
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);

@@ -19,6 +19,7 @@ void Bot::playGame()
     //continues making moves while the game is not over
     while(cin >> state)
     {
+		state.calculateDiffusionMap();
         state.updateVisionInformation();
         makeMoves();
         endTurn();
@@ -34,16 +35,22 @@ void Bot::makeMoves()
     //picks out moves for each ant
     for(int ant=0; ant<(int)state.myAnts.size(); ant++)
     {
+		int chosenD = 4;
         for(int d=0; d<TDIRECTIONS; d++)
         {
-            Location loc = state.getLocation(state.myAnts[ant], d);
+            Location testLoc = state.getLocation(state.myAnts[ant], d);
+			Location bestLoc = state.getLocation(state.myAnts[ant], chosenD);
+			state.bug << "ant " << ant << ": " << testLoc.row << testLoc.col << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
 
-            if(!state.grid[loc.row][loc.col].isWater)
+			if(state.grid[testLoc.row][testLoc.col].foodStrength > state.grid[bestLoc.row][bestLoc.col].foodStrength)
             {
-                state.makeMove(state.myAnts[ant], d);
-                break;
+				chosenD = d;
             }
         }
+		if (chosenD != 4)
+		{
+			state.makeMove(state.myAnts[ant], chosenD);
+		}
     }
 
     state.bug << "time taken: " << state.timer.getTime() << "ms" << endl << endl;
