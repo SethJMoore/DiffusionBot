@@ -290,18 +290,7 @@ void State::calculateDiffusionMap()
 			for (int x = 0; x < cols; x++)
 			{
 				Square thisSquare = grid[y][x];
-				if ((!thisSquare.isFood) && (!thisSquare.isWater) && (thisSquare.ant == -1))
-				{
-					int oldFoodStrength = thisSquare.foodStrength;
-					//bug << timer.getTime() << endl << y << x << endl;
-					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
-					grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
-																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
-																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
-																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
-																			(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
-																		));
-				}
+				foodDiffusion(thisSquare, y, x);
 			}
 		}
 		forward = 0;
@@ -313,20 +302,23 @@ void State::calculateDiffusionMap()
 			for (int x = cols - 1; x >= 0; x--)
 			{
 				Square thisSquare = grid[y][x];
-				if (!thisSquare.isFood && !thisSquare.isWater && (thisSquare.ant == -1))
-				{
-					int oldFoodStrength = thisSquare.foodStrength;
-					//bug << timer.getTime() << endl << y << x << endl;
-					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
-					grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
-																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
-																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
-																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
-																			(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
-																		));
-				}
+				foodDiffusion(thisSquare, y, x);
 			}
 		}
 		forward = 1;
+	}
+};
+
+void State::foodDiffusion(Square thisSquare, int y, int x)
+{
+	if ((!thisSquare.isFood) && (!thisSquare.isWater) && (thisSquare.ant == -1))
+	{
+		int oldFoodStrength = thisSquare.foodStrength;
+		grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
+																(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
+																(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
+																(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
+																(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
+															));
 	}
 };
