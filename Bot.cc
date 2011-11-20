@@ -41,11 +41,11 @@ void Bot::makeMoves()
         {
             Location testLoc = state.getLocation(state.myAnts[ant], d);
 			Location bestLoc = state.getLocation(state.myAnts[ant], chosenD);
-			state.bug	<< "ant " << ant << ": " 
-						<< "Row" << testLoc.row << " Col" << testLoc.col << " FoodStrength" << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
-
-			if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength + state.grid[testLoc.row][testLoc.col].enemyHillStrength) >
-				(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength + state.grid[bestLoc.row][bestLoc.col].enemyHillStrength))
+			//state.bug	<< "ant " << ant << ": " 
+			//			<< "Row" << testLoc.row << " Col" << testLoc.col << " FoodStrength" << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
+			if (calculateValue(testLoc) > calculateValue(bestLoc))
+			//if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength + state.grid[testLoc.row][testLoc.col].enemyHillStrength) >
+			//	(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength + state.grid[bestLoc.row][bestLoc.col].enemyHillStrength))
             {
 				chosenD = d;
             }
@@ -57,6 +57,13 @@ void Bot::makeMoves()
     }
 
     state.bug << "time taken: " << state.timer.getTime() << "ms" << endl << endl;
+};
+
+int Bot::calculateValue(Location & loc)
+{
+	int value;
+	value = state.grid[loc.row][loc.col].foodStrength + state.grid[loc.row][loc.col].neverSeenStrength + state.grid[loc.row][loc.col].enemyHillStrength;
+	return value;
 };
 
 //finishes the turn

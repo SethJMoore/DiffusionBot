@@ -253,9 +253,13 @@ istream& operator>>(istream &is, State &state)
 				{
                     state.myAnts.push_back(Location(row, col));
 					state.grid[row][col].foodStrength = 0;
+					state.grid[row][col].myAntsStrength += 1000;
 				}
                 else
+				{
                     state.enemyAnts.push_back(Location(row, col));
+					state.grid[row][col].enemyStrength += 1000;
+				}
             }
             else if(inputType == "d") //dead ant square
             {
@@ -268,7 +272,10 @@ istream& operator>>(istream &is, State &state)
                 state.grid[row][col].isHill = 1;
                 state.grid[row][col].hillPlayer = player;
                 if(player == 0)
+				{
                     state.myHills.push_back(Location(row, col));
+					state.grid[row][col].myHillStrength += 1000;
+				}
                 else
 				{
                     state.enemyHills.push_back(Location(row, col));
@@ -322,7 +329,7 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 
 void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
-	if ((!thisSquare.isWater) && (thisSquare.ant == -1))
+	if ((!thisSquare.isWater) && (thisSquare.ant != 0))
 	{
 		int oldFoodStrength = thisSquare.foodStrength;
 		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)));
@@ -454,7 +461,11 @@ int State::sumOfEnemyStrengths(int oldEnemyStrength, std::vector<std::vector<Squ
 
 void State::unseenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
-	if (!thisSquare.isWater)
+	if ((!thisSquare.isVisible) && (!thisSquare.isWater))
+	{
+		grid[y][x].unseenStrength = 1000;
+	}
+	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
 	{
 		int oldUnseenStrength = thisSquare.unseenStrength;
 		grid[y][x].unseenStrength = oldUnseenStrength + int((.15) * (sumOfUnseenStrengths(oldUnseenStrength, oldGrid, y, x)));
