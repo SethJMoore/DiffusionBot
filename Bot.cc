@@ -19,8 +19,8 @@ void Bot::playGame()
     //continues making moves while the game is not over
     while(cin >> state)
     {
-		state.calculateDiffusionMap();
         state.updateVisionInformation();
+		state.calculateDiffusionMap();
         makeMoves();
         endTurn();
     }
@@ -42,7 +42,8 @@ void Bot::makeMoves()
 			Location bestLoc = state.getLocation(state.myAnts[ant], chosenD);
 			state.bug << "ant " << ant << ": " << testLoc.row << testLoc.col << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
 
-			if(state.grid[testLoc.row][testLoc.col].foodStrength > state.grid[bestLoc.row][bestLoc.col].foodStrength)
+			if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength) >
+				(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength))
             {
 				chosenD = d;
             }

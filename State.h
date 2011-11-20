@@ -64,6 +64,7 @@ struct State
 	
 	void calculateDiffusionMap();
 	void foodDiffusion(Square thisSquare, int y, int x);
+	void neverSeenDiffusion(Square thisSquare, int y, int x);
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);

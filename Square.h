@@ -8,14 +8,14 @@
 */
 struct Square
 {
-    bool isVisible, isWater, isHill, isFood;
+    bool isVisible, isWater, isHill, isFood, hasBeenSeen;
     int ant, hillPlayer;
 	int foodStrength, enemyHillStrength, enemyStrength, unseenStrength, neverSeenStrength, myAntsStrength, myHillStrength;
     std::vector<int> deadAnts;
 
     Square()
     {
-        isVisible = isWater = isHill = isFood =  false;
+        isVisible = isWater = isHill = isFood = hasBeenSeen =  false;
         ant = hillPlayer = -1;
 		foodStrength = enemyHillStrength = enemyStrength = unseenStrength = neverSeenStrength = myAntsStrength = myHillStrength = 0;
     };

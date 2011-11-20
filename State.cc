@@ -91,6 +91,7 @@ void State::updateVisionInformation()
 
         std::vector<std::vector<bool> > visited(rows, std::vector<bool>(cols, 0));
         grid[sLoc.row][sLoc.col].isVisible = 1;
+		grid[sLoc.row][sLoc.col].hasBeenSeen = true;
         visited[sLoc.row][sLoc.col] = 1;
 
         while(!locQueue.empty())
@@ -105,6 +106,7 @@ void State::updateVisionInformation()
                 if(!visited[nLoc.row][nLoc.col] && distance(sLoc, nLoc) <= viewradius)
                 {
                     grid[nLoc.row][nLoc.col].isVisible = 1;
+					grid[nLoc.row][nLoc.col].hasBeenSeen = true;
                     locQueue.push(nLoc);
                 }
                 visited[nLoc.row][nLoc.col] = 1;
@@ -291,7 +293,10 @@ void State::calculateDiffusionMap()
 			{
 				Square thisSquare = grid[y][x];
 				foodDiffusion(thisSquare, y, x);
+				neverSeenDiffusion(thisSquare, y, x);
+				bug << thisSquare.hasBeenSeen;
 			}
+			bug << endl;
 		}
 		forward = 0;
 	}
@@ -303,7 +308,10 @@ void State::calculateDiffusionMap()
 			{
 				Square thisSquare = grid[y][x];
 				foodDiffusion(thisSquare, y, x);
+				neverSeenDiffusion(thisSquare, y, x);
+				bug << thisSquare.hasBeenSeen;
 			}
+			bug << endl;
 		}
 		forward = 1;
 	}
@@ -322,3 +330,25 @@ void State::foodDiffusion(Square thisSquare, int y, int x)
 															));
 	}
 };
+
+void State::neverSeenDiffusion(Square thisSquare, int y, int x)
+{
+	if (!thisSquare.hasBeenSeen)
+	{
+		grid[y][x].neverSeenStrength = 1000;
+	}
+	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
+	{
+		int oldNeverSeenStrength = thisSquare.neverSeenStrength;
+		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.25) * (
+																(grid[(y + rows - 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
+																(grid[y][(x + 1) % cols].neverSeenStrength - oldNeverSeenStrength) +
+																(grid[(y + 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
+																(grid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength)
+															));
+	}
+	else
+	{
+		grid[y][x].neverSeenStrength = 0;
+	}
+}
