@@ -63,6 +63,7 @@ int Bot::calculateValue(Location & loc)
 	value += state.grid[loc.row][loc.col].foodStrength;
 	value += state.grid[loc.row][loc.col].neverSeenStrength;
 	value += state.grid[loc.row][loc.col].enemyHillStrength;
+	value -= state.grid[loc.row][loc.col].enemyStrength;
 	return value;
 };
 

@@ -433,7 +433,7 @@ void State::enemyDiffusion(Square thisSquare, int y, int x, std::vector<std::vec
 	if (!thisSquare.isWater)
 	{
 		int oldEnemyStrength = thisSquare.enemyStrength;
-		grid[y][x].enemyStrength = oldEnemyStrength + int((.15) * (sumOfEnemyStrengths(oldEnemyStrength, oldGrid, y, x)));
+		grid[y][x].enemyStrength = oldEnemyStrength + int((.09) * (sumOfEnemyStrengths(oldEnemyStrength, oldGrid, y, x)));
 	}
 };
 
@@ -530,7 +530,7 @@ void State::myHillsDiffusion(Square thisSquare, int y, int x, std::vector<std::v
 	if (!thisSquare.isWater)
 	{
 		int oldMyHillsStrength = thisSquare.myHillStrength;
-		grid[y][x].myHillStrength = oldMyHillsStrength + int((.15) * (sumOfMyHillsStrengths(oldMyHillsStrength, oldGrid, y, x)));
+		grid[y][x].myHillStrength = oldMyHillsStrength + int((.04) * (sumOfMyHillsStrengths(oldMyHillsStrength, oldGrid, y, x)));
 	}
 };
 
