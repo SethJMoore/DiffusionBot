@@ -217,6 +217,7 @@ istream& operator>>(istream &is, State &state)
             {
                 is >> row >> col;
                 state.grid[row][col].isWater = 1;
+				state.grid[row][col].foodStrength = 0;
             }
             else if(inputType == "f") //food square
             {
@@ -292,7 +293,7 @@ void State::calculateDiffusionMap()
 					int oldFoodStrength = thisSquare.foodStrength;
 					//bug << timer.getTime() << endl << y << x << endl;
 					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
-					grid[y][x].foodStrength = oldFoodStrength + int((.30) * (
+					grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
 																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
 																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
 																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
@@ -316,7 +317,7 @@ void State::calculateDiffusionMap()
 					int oldFoodStrength = thisSquare.foodStrength;
 					//bug << timer.getTime() << endl << y << x << endl;
 					//bug << "(y+rows-1) % rows, x = " << (y+rows-1)%rows << " , " << x << endl;
-					grid[y][x].foodStrength = oldFoodStrength + int((.30) * (
+					grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
 																			(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
 																			(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
 																			(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
