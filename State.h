@@ -63,8 +63,9 @@ struct State
     void updateVisionInformation();
 	
 	void calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid);
-	void foodDiffusion(Square thisSquare, int y, int x);
-	void neverSeenDiffusion(Square thisSquare, int y, int x);
+	void foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
+	int sumOfFoodStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+	void neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);

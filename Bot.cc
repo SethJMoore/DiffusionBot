@@ -36,14 +36,16 @@ void Bot::makeMoves()
     for(int ant=0; ant<(int)state.myAnts.size(); ant++)
     {
 		int chosenD = 4;
+		state.bug << "ant " << ant << ": " << "FoodStrength" << state.grid[state.getLocation(state.myAnts[ant], chosenD).row][state.getLocation(state.myAnts[ant], chosenD).row].foodStrength << endl;
         for(int d=0; d<TDIRECTIONS; d++)
         {
             Location testLoc = state.getLocation(state.myAnts[ant], d);
 			Location bestLoc = state.getLocation(state.myAnts[ant], chosenD);
-			state.bug << "ant " << ant << ": " << testLoc.row << testLoc.col << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
+			state.bug	<< "ant " << ant << ": " 
+						<< "Row" << testLoc.row << " Col" << testLoc.col << " FoodStrength" << state.grid[testLoc.row][testLoc.col].foodStrength << endl;
 
-			if(	(state.grid[testLoc.row][testLoc.col].foodStrength + state.grid[testLoc.row][testLoc.col].neverSeenStrength) >
-				(state.grid[bestLoc.row][bestLoc.col].foodStrength + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength))
+			if(	(state.grid[testLoc.row][testLoc.col].foodStrength/* + state.grid[testLoc.row][testLoc.col].neverSeenStrength*/) >
+				(state.grid[bestLoc.row][bestLoc.col].foodStrength/* + state.grid[bestLoc.row][bestLoc.col].neverSeenStrength*/))
             {
 				chosenD = d;
             }

@@ -227,7 +227,7 @@ istream& operator>>(istream &is, State &state)
             {
                 is >> row >> col;
                 state.grid[row][col].isFood = 1;
-				state.grid[row][col].foodStrength = 1000;
+				state.grid[row][col].foodStrength += 1000;
                 state.food.push_back(Location(row, col));
             }
             else if(inputType == "a") //live ant square
@@ -291,47 +291,48 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 		{
 			for (int x = 0; x < cols; x++)
 			{
-				Square thisSquare = grid[y][x];
-				foodDiffusion(thisSquare, y, x);
-				neverSeenDiffusion(thisSquare, y, x);
+				Square thisSquare = oldGrid[y][x];
+				foodDiffusion(thisSquare, y, x, oldGrid);
+				neverSeenDiffusion(thisSquare, y, x, oldGrid);
 				bug << thisSquare.hasBeenSeen;
 			}
 			bug << endl;
 		}
-		forward = 0;
+	//	forward = 0;
 	}
-	else
-	{
-		for (int y = rows - 1; y >= 0; y--)
-		{
-			for (int x = cols - 1; x >= 0; x--)
-			{
-				Square thisSquare = grid[y][x];
-				foodDiffusion(thisSquare, y, x);
-				neverSeenDiffusion(thisSquare, y, x);
-				bug << thisSquare.hasBeenSeen;
-			}
-			bug << endl;
-		}
-		forward = 1;
-	}
+	//else
+	//{
+	//	for (int y = rows - 1; y >= 0; y--)
+	//	{
+	//		for (int x = cols - 1; x >= 0; x--)
+	//		{
+	//			Square thisSquare = grid[y][x];
+	//			foodDiffusion(thisSquare, y, x);
+	//			neverSeenDiffusion(thisSquare, y, x);
+	//			bug << thisSquare.hasBeenSeen;
+	//		}
+	//		bug << endl;
+	//	}
+	//	forward = 1;
+	//}
 };
 
-void State::foodDiffusion(Square thisSquare, int y, int x)
+void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
-	if ((!thisSquare.isFood) && (!thisSquare.isWater) && (thisSquare.ant == -1))
+	if (/*(!thisSquare.isFood) && */(!thisSquare.isWater) && (thisSquare.ant == -1))
 	{
 		int oldFoodStrength = thisSquare.foodStrength;
-		grid[y][x].foodStrength = oldFoodStrength + int((.35) * (
-																(grid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
-																(grid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
-																(grid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
-																(grid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)
-															));
+		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (
+																/*(oldGrid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength) +
+																(oldGrid[y][(x + 1) % cols].foodStrength - oldFoodStrength) +
+																(oldGrid[(y + 1) % rows][x].foodStrength - oldFoodStrength) +
+																(oldGrid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength)*/
+																sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)
+																));
 	}
 };
 
-void State::neverSeenDiffusion(Square thisSquare, int y, int x)
+void State::neverSeenDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
 	if (!thisSquare.hasBeenSeen)
 	{
@@ -340,15 +341,37 @@ void State::neverSeenDiffusion(Square thisSquare, int y, int x)
 	else if ((!thisSquare.isWater) && (thisSquare.ant != 0))
 	{
 		int oldNeverSeenStrength = thisSquare.neverSeenStrength;
-		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.25) * (
-																(grid[(y + rows - 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
-																(grid[y][(x + 1) % cols].neverSeenStrength - oldNeverSeenStrength) +
-																(grid[(y + 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
-																(grid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength)
+		grid[y][x].neverSeenStrength = oldNeverSeenStrength + int((.15) * (
+																(oldGrid[(y + rows - 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
+																(oldGrid[y][(x + 1) % cols].neverSeenStrength - oldNeverSeenStrength) +
+																(oldGrid[(y + 1) % rows][x].neverSeenStrength - oldNeverSeenStrength) +
+																(oldGrid[y][(x + cols - 1) % cols].neverSeenStrength - oldNeverSeenStrength)
 															));
 	}
 	else
 	{
 		grid[y][x].neverSeenStrength = 0;
 	}
-}
+};
+
+int State::sumOfFoodStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x)
+{
+	int sum = 0;
+	if (!oldGrid[(y + rows - 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + rows - 1) % rows][x].foodStrength - oldFoodStrength);
+	}
+	if (!oldGrid[y][(x + 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + 1) % cols].foodStrength - oldFoodStrength);
+	}
+	if (!oldGrid[(y + 1) % rows][x].isWater)
+	{
+		sum += (oldGrid[(y + 1) % rows][x].foodStrength - oldFoodStrength);
+	}
+	if (!oldGrid[y][(x + cols - 1) % cols].isWater)
+	{
+		sum += (oldGrid[y][(x + cols - 1) % cols].foodStrength - oldFoodStrength);
+	}
+	return sum;
+};
