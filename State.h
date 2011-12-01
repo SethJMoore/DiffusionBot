@@ -45,6 +45,7 @@ struct State
 
     Timer timer;
     Bug bug;
+	std::ofstream diffusionOut;
 
     /*
         Functions
@@ -85,9 +86,12 @@ struct State
 	
 	void myHillsDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid);
 	int sumOfMyHillsStrengths(int oldFoodStrength, std::vector<std::vector<Square> > & oldGrid, int y, int x);
+
+	void diffusionMapToFile(std::ofstream &os);
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);
 std::istream& operator>>(std::istream &is, State &state);
+
 
 #endif //STATE_H_

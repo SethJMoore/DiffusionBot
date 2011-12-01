@@ -14,6 +14,7 @@ void Bot::playGame()
     //reads the game parameters and sets up
     cin >> state;
     state.setup();
+	state.diffusionOut << state.rows << " " << state.cols << endl;
     endTurn();
 
     //continues making moves while the game is not over
@@ -31,6 +32,7 @@ void Bot::makeMoves()
 {
     state.bug << "turn " << state.turn << ":" << endl;
     state.bug << state << endl;
+	state.diffusionMapToFile(state.diffusionOut);
 
     //picks out moves for each ant
     for(int ant=0; ant<(int)state.myAnts.size(); ant++)
@@ -63,7 +65,8 @@ int Bot::calculateValue(Location & loc)
 	value += state.grid[loc.row][loc.col].foodStrength;
 	value += state.grid[loc.row][loc.col].neverSeenStrength;
 	value += state.grid[loc.row][loc.col].enemyHillStrength;
-	value -= state.grid[loc.row][loc.col].enemyStrength;
+	value += state.grid[loc.row][loc.col].unseenStrength;
+	//value -= state.grid[loc.row][loc.col].enemyStrength;
 	return value;
 };
 
