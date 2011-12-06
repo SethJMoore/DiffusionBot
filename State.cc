@@ -359,7 +359,7 @@ void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vect
 	if ((!thisSquare.isWater) && (thisSquare.ant != 0) && (!thisSquare.isFood))
 	{
 		int oldFoodStrength = thisSquare.foodStrength;
-		grid[y][x].foodStrength = oldFoodStrength + int((.20) * (sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)));
+		grid[y][x].foodStrength = oldFoodStrength + int((.25) * (sumOfFoodStrengths(oldFoodStrength, oldGrid, y, x)));
 	}
 };
 
