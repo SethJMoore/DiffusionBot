@@ -21,7 +21,10 @@ void Bot::playGame()
     while(cin >> state)
     {
         state.updateVisionInformation();
-		state.calculateDiffusionMap(state.grid);
+		for (int i = 0; i < 20; i++) // Diffuse the map for a few turns.
+		{
+			state.calculateDiffusionMap(state.grid);
+		}
         makeMoves();
         endTurn();
     }
@@ -66,7 +69,8 @@ int Bot::calculateValue(Location & loc)
 	value += state.grid[loc.row][loc.col].neverSeenStrength;
 	value += state.grid[loc.row][loc.col].enemyHillStrength;
 	value += state.grid[loc.row][loc.col].unseenStrength;
-	//value -= state.grid[loc.row][loc.col].enemyStrength;
+	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
+	//value -= state.grid[loc.row][loc.col].enemyStrength / 4;
 	return value;
 };
 
