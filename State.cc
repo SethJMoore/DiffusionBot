@@ -353,6 +353,7 @@ void State::calculateDiffusionMap(std::vector<std::vector<Square> > oldGrid)
 	}
 };
 
+// TODO: If food gets eaten, set that square to 0.
 void State::foodDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
 	if ((!thisSquare.isWater) && (thisSquare.ant != 0) && (!thisSquare.isFood))
