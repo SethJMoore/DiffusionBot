@@ -1,5 +1,4 @@
-#ifndef BOT_H_
-#define BOT_H_
+#pragma once
 
 #include "State.h"
 
@@ -19,4 +18,3 @@ struct Bot
     void endTurn();     //indicates to the engine that it has made its moves
 };
 
-#endif //BOT_H_

@@ -1,5 +1,4 @@
-#ifndef TIMER_H_
-#define TIMER_H_
+#pragma once
 
 #include <time.h>
 //#include <sys/time.h>
@@ -62,4 +61,3 @@
 #endif
 
 
-#endif //TIMER_H_

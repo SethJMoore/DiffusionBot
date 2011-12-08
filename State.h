@@ -1,5 +1,4 @@
-#ifndef STATE_H_
-#define STATE_H_
+#pragma once
 
 #include <iostream>
 #include <stdio.h>
@@ -15,6 +14,7 @@
 #include "Bug.h"
 #include "Square.h"
 #include "Location.h"
+#include "AntArmy.h"
 
 /*
     constants
@@ -39,6 +39,8 @@ struct State
     std::vector<double> scores;
     bool gameover;
     int64_t seed;
+
+	AntArmy myAntArmy;
 
     std::vector<std::vector<Square> > grid;
     std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food;
@@ -94,4 +96,3 @@ std::ostream& operator<<(std::ostream &os, const State &state);
 std::istream& operator>>(std::istream &is, State &state);
 
 
-#endif //STATE_H_

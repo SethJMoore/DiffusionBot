@@ -1,5 +1,4 @@
-#ifndef LOCATION_H_
-#define LOCATION_H_
+#pragma once
 
 /*
     struct for representing locations in the grid.
@@ -20,4 +19,3 @@ struct Location
     };
 };
 
-#endif //LOCATION_H_
