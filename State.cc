@@ -148,7 +148,8 @@ void State::diffusionMapToFile(std::ofstream &os)
 
 		for (; col_it != col_end; ++col_it)
 		{
-			os << (*col_it).foodStrength << " ";
+			//os << (*col_it).foodStrength << " ";
+			os << (*col_it).enemyHillStrength << " ";
 		}
 	}
 	os << endl;
@@ -424,12 +425,13 @@ int State::sumOfNeverSeenStrengths(int oldNeverSeenStrength, std::vector<std::ve
 	return sum;
 };
 
+// TODO: Fix lingering enemyHillStrength after hill is destroyed.
 void State::enemyHillDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
 	if ((!thisSquare.isWater) && (!thisSquare.isHill))
 	{
 		int oldEnemyHillStrength = thisSquare.enemyHillStrength;
-		grid[y][x].enemyHillStrength = oldEnemyHillStrength + int((.15) * (sumOfEnemyHillStrengths(oldEnemyHillStrength, oldGrid, y, x)));
+		grid[y][x].enemyHillStrength = oldEnemyHillStrength + int((.25) * (sumOfEnemyHillStrengths(oldEnemyHillStrength, oldGrid, y, x)));
 	}
 };
 

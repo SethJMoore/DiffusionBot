@@ -21,7 +21,7 @@ void Bot::playGame()
     while(cin >> state)
     {
         state.updateVisionInformation();
-		state.myAntArmy.updateAnts(state);
+		state.myAntArmy.updateAnts(state, state.myAnts);
 		for (int i = 0; i < 20; i++) // Diffuse the map for a few turns.
 		{
 			state.calculateDiffusionMap(state.grid);
