@@ -12,6 +12,8 @@ public:
 
 	Ant(Location loc, State & state);
 
+	void chooseMove(State & state);
+	int calculateValue(Location & loc, State & state);
 	Location location;
 };
 
