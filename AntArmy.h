@@ -17,6 +17,7 @@ public:
 	void updateAnts(State & state, std::vector<Location> newLocations);
 
 	void chooseMoves(State & state);
+	Ant recruitNewAnt(Location loc, State & state);
 	std::vector<Ant> myAntArmy;
 };
 

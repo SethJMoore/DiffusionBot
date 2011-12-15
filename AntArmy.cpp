@@ -39,8 +39,9 @@ void AntArmy::updateAnts(State & state, std::vector<Location> newLocations)
 	std::vector<Location>::iterator vIter = newLocations.begin();
 	while (vIter != newLocations.end()) // Add new ants to my army.
 	{
-		Ant newAnt((*vIter), state); // Gonna have to make recruitmentCenter function to create appropriate ant type.
-		myAntArmy.push_back(newAnt);
+		//Ant newAnt((*vIter), state); // Gonna have to make recruitmentCenter function to create appropriate ant type.
+		//myAntArmy.push_back(newAnt);
+		myAntArmy.push_back(recruitNewAnt((*vIter), state));
 		vIter++;
 	}
 }
@@ -53,4 +54,10 @@ void AntArmy::chooseMoves(State & state)
 		(*mIter).chooseMove(state);
 		mIter++;
 	}
+}
+
+Ant AntArmy::recruitNewAnt(Location loc, State & state)
+{
+	Ant newAnt(loc, state);
+	return newAnt;
 }

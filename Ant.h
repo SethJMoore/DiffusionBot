@@ -13,7 +13,7 @@ public:
 	Ant(Location loc, State & state);
 
 	virtual void chooseMove(State & state);
-	int calculateValue(Location & loc, State & state);
+	virtual int calculateValue(Location & loc, State & state);
 	Location location;
 };
 

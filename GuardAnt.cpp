@@ -33,3 +33,18 @@ void GuardAnt::chooseMove(State & state)
 		location = state.getLocation(location, chosenD);
 	}
 }
+
+int GuardAnt::calculateValue(Location & loc, State & state)
+{
+	int value = 0;
+	value += state.grid[loc.row][loc.col].foodStrength;
+	value += state.grid[loc.row][loc.col].enemyHillStrength;
+	value += state.grid[loc.row][loc.col].unseenStrength;
+	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
+	value += state.grid[loc.row][loc.col].enemyStrength;
+	if (state.grid[loc.row][loc.col].myHillStrength < 500)
+	{
+		value = 0;
+	}
+	return value;
+};
