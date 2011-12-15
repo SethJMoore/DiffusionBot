@@ -42,7 +42,7 @@ int GuardAnt::calculateValue(Location & loc, State & state)
 	value += state.grid[loc.row][loc.col].unseenStrength;
 	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
 	value += state.grid[loc.row][loc.col].enemyStrength;
-	if (state.grid[loc.row][loc.col].myHillStrength < 500)
+	if (state.grid[loc.row][loc.col].myHillStrength < 50)
 	{
 		value = 0;
 	}

@@ -1,6 +1,7 @@
 #include "AntArmy.h"
 
 #include "State.h"
+#include "GuardAnt.h"
 
 AntArmy::AntArmy(void)
 {
@@ -13,14 +14,14 @@ AntArmy::~AntArmy(void)
 
 void AntArmy::updateAnts(State & state, std::vector<Location> newLocations)
 {
-	std::vector<Ant>::iterator mIter = myAntArmy.begin();
+	std::vector<Ant *>::iterator mIter = myAntArmy.begin();
 	while (mIter != myAntArmy.end()) // Go through each ant in my army.
 	{
 		bool isStillAlive = false;
 		std::vector<Location>::iterator vIter = newLocations.begin();
 		while (vIter != newLocations.end()) // Check against the newly updated ants to see if still alive.
 		{
-			if ((*mIter).location == (*vIter))
+			if ((*(*mIter)).location == (*vIter))
 			{
 				isStillAlive = true;
 				vIter = newLocations.erase(vIter);
@@ -32,6 +33,7 @@ void AntArmy::updateAnts(State & state, std::vector<Location> newLocations)
 		if (!isStillAlive)
 		{
 			// Get rid of the ant if it's not found, but advance the iterator to the next position.
+			delete *mIter;
 			mIter = myAntArmy.erase(mIter); // Post increment so that erase will happen to the original value before the increment happens.
 		}
 	}
@@ -48,16 +50,35 @@ void AntArmy::updateAnts(State & state, std::vector<Location> newLocations)
 
 void AntArmy::chooseMoves(State & state)
 {
-	std::vector<Ant>::iterator mIter = myAntArmy.begin();
+	std::vector<Ant *>::iterator mIter = myAntArmy.begin();
 	while (mIter != myAntArmy.end())
 	{
-		(*mIter).chooseMove(state);
+		(*(*mIter)).chooseMove(state);
 		mIter++;
 	}
 }
 
-Ant AntArmy::recruitNewAnt(Location loc, State & state)
+Ant * AntArmy::recruitNewAnt(Location loc, State & state)
 {
-	Ant newAnt(loc, state);
-	return newAnt;
+	int numberOfGuards = 0;
+	std::vector<Ant *>::iterator mIter = myAntArmy.begin();
+	while (mIter != myAntArmy.end())
+	{
+		if (typeid(*(*mIter)) == typeid(GuardAnt))
+		{
+			numberOfGuards++;
+		}
+		mIter++;
+	}
+
+	if (numberOfGuards < (myAntArmy.size() / 10))
+	{
+		GuardAnt *newAnt = new GuardAnt(loc, state);
+		return newAnt;
+	}
+	else
+	{
+		Ant *newAnt = new Ant(loc, state);
+		return newAnt;
+	}
 }
