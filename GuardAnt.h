@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ant.h"
+#include "Ant.h"
 
 class GuardAnt :
 	public Ant

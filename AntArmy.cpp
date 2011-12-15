@@ -1,5 +1,7 @@
 #include "AntArmy.h"
 
+#include <typeinfo>
+
 #include "State.h"
 #include "GuardAnt.h"
 
@@ -71,7 +73,7 @@ Ant * AntArmy::recruitNewAnt(Location loc, State & state)
 		mIter++;
 	}
 
-	if (numberOfGuards < (myAntArmy.size() / 10))
+	if (numberOfGuards < (myAntArmy.size() / 10) && numberOfGuards < (state.myHills.size() * 4))
 	{
 		GuardAnt *newAnt = new GuardAnt(loc, state);
 		return newAnt;

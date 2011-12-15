@@ -15,5 +15,6 @@ public:
 	virtual void chooseMove(State & state);
 	virtual int calculateValue(Location & loc, State & state);
 	Location location;
+	int idleTurns;
 };
 

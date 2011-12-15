@@ -32,6 +32,20 @@ void GuardAnt::chooseMove(State & state)
 		state.makeMove(location, chosenD);
 		location = state.getLocation(location, chosenD);
 	}
+	else if (idleTurns > 3)
+	{
+		chosenD = rand() % 4;
+		if (state.isSafeMove(location, chosenD))
+		{
+			state.makeMove(location, chosenD);
+			location = state.getLocation(location, chosenD);
+		}
+		idleTurns++;
+	}
+	else
+	{
+		idleTurns++;
+	}
 }
 
 int GuardAnt::calculateValue(Location & loc, State & state)
@@ -41,10 +55,10 @@ int GuardAnt::calculateValue(Location & loc, State & state)
 	value += state.grid[loc.row][loc.col].enemyHillStrength;
 	value += state.grid[loc.row][loc.col].unseenStrength;
 	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
-	value += state.grid[loc.row][loc.col].enemyStrength;
-	if (state.grid[loc.row][loc.col].myHillStrength < 50)
+	value += state.grid[loc.row][loc.col].enemyStrength * 2;
+	if (state.grid[loc.row][loc.col].myHillStrength < 25)
 	{
-		value = 0;
+		value = state.grid[loc.row][loc.col].enemyStrength;
 	}
 	return value;
 };

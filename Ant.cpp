@@ -15,6 +15,7 @@ Ant::~Ant(void)
 Ant::Ant(Location loc, State & state)
 {
 	location = loc;
+	idleTurns = 0;
 }
 
 void Ant::chooseMove(State & state)
@@ -37,6 +38,21 @@ void Ant::chooseMove(State & state)
 	{
 		state.makeMove(location, chosenD);
 		location = state.getLocation(location, chosenD);
+		idleTurns = 0;
+	}
+	else if (idleTurns > 1)
+	{
+		chosenD = rand() % 4;
+		if (state.isSafeMove(location, chosenD))
+		{
+			state.makeMove(location, chosenD);
+			location = state.getLocation(location, chosenD);
+		}
+		idleTurns++;
+	}
+	else
+	{
+		idleTurns++;
 	}
 }
 
@@ -49,5 +65,9 @@ int Ant::calculateValue(Location & loc, State & state)
 	value += state.grid[loc.row][loc.col].unseenStrength;
 	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
 	//value -= state.grid[loc.row][loc.col].enemyStrength / 4;
+	if ((state.grid[loc.row][loc.col].enemyStrength * 4) >= state.grid[loc.row][loc.col].myAntsStrength)
+	{
+		value = 0;
+	}
 	return value;
 };

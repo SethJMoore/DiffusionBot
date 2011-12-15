@@ -8,14 +8,14 @@ State::State()
     gameover = 0;
     turn = 0;
     bug.open("debug.txt");
-	diffusionOut.open("diffuseMap.txt");
+	//diffusionOut.open("diffuseMap.txt");
 };
 
 //deconstructor
 State::~State()
 {
     bug.close();
-	diffusionOut.close();
+	//diffusionOut.close();
 };
 
 //sets the state up
@@ -52,7 +52,7 @@ bool State::isSafeMove(Location & fromHere, int direction)
 {
 	bool safe;
 	Location testLoc = getLocation(fromHere, direction);
-	if (grid[testLoc.row][testLoc.col].ant == 0)
+	if (grid[testLoc.row][testLoc.col].ant == 0 || grid[testLoc.row][testLoc.col].isWater)
 	{
 		safe = false;
 	}
@@ -136,24 +136,24 @@ void State::updateVisionInformation()
 	Send diffusion data to file so that it can be read and visualized
 	by another program.
 */
-void State::diffusionMapToFile(std::ofstream &os)
-{
-	std::vector<std::vector<Square>>::iterator row_it = grid.begin();
-	std::vector<std::vector<Square>>::iterator row_end = grid.end();
-
-	for (; row_it != row_end; ++row_it)
-	{
-		std::vector<Square>::iterator col_it = row_it->begin();
-		std::vector<Square>::iterator col_end = row_it->end();
-
-		for (; col_it != col_end; ++col_it)
-		{
-			//os << (*col_it).foodStrength << " ";
-			os << (*col_it).enemyHillStrength << " ";
-		}
-	}
-	os << endl;
-}
+//void State::diffusionMapToFile(std::ofstream &os)
+//{
+//	std::vector<std::vector<Square>>::iterator row_it = grid.begin();
+//	std::vector<std::vector<Square>>::iterator row_end = grid.end();
+//
+//	for (; row_it != row_end; ++row_it)
+//	{
+//		std::vector<Square>::iterator col_it = row_it->begin();
+//		std::vector<Square>::iterator col_end = row_it->end();
+//
+//		for (; col_it != col_end; ++col_it)
+//		{
+//			//os << (*col_it).foodStrength << " ";
+//			os << (*col_it).enemyHillStrength << " ";
+//		}
+//	}
+//	os << endl;
+//}
 
 /*
     This is the output function for a state. It will add a char map
@@ -459,10 +459,14 @@ int State::sumOfEnemyHillStrengths(int oldEnemyHillStrength, std::vector<std::ve
 
 void State::enemyDiffusion(Square thisSquare, int y, int x, std::vector<std::vector<Square> > & oldGrid)
 {
-	if ((!thisSquare.isWater) && (thisSquare.ant > 0))
+	if ((!thisSquare.isWater) && (thisSquare.ant < 1))
 	{
 		int oldEnemyStrength = thisSquare.enemyStrength;
-		grid[y][x].enemyStrength = oldEnemyStrength + int((.09) * (sumOfEnemyStrengths(oldEnemyStrength, oldGrid, y, x)));
+		grid[y][x].enemyStrength = oldEnemyStrength + int((.25) * (sumOfEnemyStrengths(oldEnemyStrength, oldGrid, y, x)));
+	}
+	else if (thisSquare.ant == 0)
+	{
+		grid[y][x].enemyStrength = 0;
 	}
 };
 

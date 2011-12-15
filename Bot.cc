@@ -14,7 +14,7 @@ void Bot::playGame()
     //reads the game parameters and sets up
     cin >> state;
     state.setup();
-	state.diffusionOut << state.rows << " " << state.cols << endl;
+	//state.diffusionOut << state.rows << " " << state.cols << endl;
     endTurn();
 
     //continues making moves while the game is not over
@@ -36,7 +36,7 @@ void Bot::makeMoves()
 {
     state.bug << "turn " << state.turn << ":" << endl;
     state.bug << state << endl;
-	state.diffusionMapToFile(state.diffusionOut);
+	//state.diffusionMapToFile(state.diffusionOut);
 
 	state.myAntArmy.chooseMoves(state);
 

@@ -27,6 +27,7 @@ struct Square
         isFood = 0;
         ant = hillPlayer = -1;
         deadAnts.clear();
+		enemyStrength = myAntsStrength = 0;
     };
 };
 
