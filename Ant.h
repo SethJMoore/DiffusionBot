@@ -8,11 +8,11 @@ class Ant
 {
 public:
 	Ant(void);
-	~Ant(void);
+	virtual ~Ant(void);
 
 	Ant(Location loc, State & state);
 
-	void chooseMove(State & state);
+	virtual void chooseMove(State & state);
 	int calculateValue(Location & loc, State & state);
 	Location location;
 };
