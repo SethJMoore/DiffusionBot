@@ -36,6 +36,7 @@ void Ant::chooseMove(State & state)
 	if ((chosenD != 4) && state.isSafeMove(location, chosenD))
 	{
 		state.makeMove(location, chosenD);
+		location = state.getLocation(location, chosenD);
 	}
 }
 
