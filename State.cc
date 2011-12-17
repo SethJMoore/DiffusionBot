@@ -264,6 +264,8 @@ istream& operator>>(istream &is, State &state)
 				state.grid[row][col].myHillStrength = 0;
 				state.grid[row][col].neverSeenStrength = 0;
 				state.grid[row][col].unseenStrength = 0;
+				state.grid[row][col].enemyStrength = 0;
+				state.grid[row][col].myAntsStrength = 0;
             }
             else if(inputType == "f") //food square
             {
