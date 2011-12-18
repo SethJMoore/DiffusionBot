@@ -65,7 +65,11 @@ int Ant::calculateValue(Location & loc, State & state)
 	value += state.grid[loc.row][loc.col].unseenStrength;
 	//value -= state.grid[loc.row][loc.col].myHillStrength / 4;
 	//value -= state.grid[loc.row][loc.col].enemyStrength / 4;
-	if ((state.grid[loc.row][loc.col].enemyStrength * 4) >= state.grid[loc.row][loc.col].myAntsStrength)
+	if (state.grid[loc.row][loc.col].myHillStrength > 20)
+	{
+		value += state.grid[loc.row][loc.col].enemyStrength * 2;
+	}
+	else if ((state.grid[loc.row][loc.col].enemyStrength * 4) >= state.grid[loc.row][loc.col].myAntsStrength)
 	{
 		value = 0;
 	}

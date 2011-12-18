@@ -73,7 +73,7 @@ Ant * AntArmy::recruitNewAnt(Location loc, State & state)
 		mIter++;
 	}
 
-	if (numberOfGuards < (myAntArmy.size() / 10) && numberOfGuards < (state.myHills.size() * 4))
+	if (numberOfGuards < (myAntArmy.size() / 10) && numberOfGuards < (state.myHills.size() * 6))
 	{
 		GuardAnt *newAnt = new GuardAnt(loc, state);
 		return newAnt;
